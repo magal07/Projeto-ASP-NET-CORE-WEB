@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SalesWebMvc.Models.ViewModels
+namespace SalesWebMvc.Models
 {
     public class Seller
     {

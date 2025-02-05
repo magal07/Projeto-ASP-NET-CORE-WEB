@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 
 namespace SalesWebMvc
 {
@@ -40,7 +41,9 @@ namespace SalesWebMvc
                     options.UseMySql(Configuration.GetConnectionString("SalesWebMvcContext"), builder =>
                     builder.MigrationsAssembly("SalesWebMvc")));
 
-            services.AddScoped<SeedingService>(); // injeção de dependência
+                                    // Inject Dependency
+            services.AddScoped<SeedingService>();  // 
+            services.AddScoped<SellerService>(); // vendedor
 
             }
 

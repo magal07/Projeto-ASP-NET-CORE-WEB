@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using SalesWebMvc.Models;
 using SalesWebMvc.Models.Enums;
-using SalesWebMvc.Models.ViewModels;
 
 namespace SalesWebMvc.Data
 {

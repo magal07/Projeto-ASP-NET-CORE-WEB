@@ -1,9 +1,8 @@
 ﻿using SalesWebMvc.Models.Enums;
-using SalesWebMvc.Models.ViewModels;
 using System;
 
 namespace SalesWebMvc.Models
-    {
+{
     public class SalesRecord
         {
         public int Id { get; set; }

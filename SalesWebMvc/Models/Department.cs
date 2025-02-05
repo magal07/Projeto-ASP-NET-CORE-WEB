@@ -1,10 +1,9 @@
-﻿using SalesWebMvc.Models.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using System.Linq;
 
 namespace SalesWebMvc.Models
-    {
+{
     public class Department
         {
         public int Id { get; set; }
