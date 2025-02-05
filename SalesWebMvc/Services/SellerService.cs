@@ -21,7 +21,9 @@ namespace SalesWebMvc.Services
         }
 
         public void Insert(Seller obj)
-        {
+        {    /* só pra buscar o primeiro departamento e acrescenta-lo,
+             caso nenhum seja informado, afim de não deixar acarretar em uma exceção */
+            obj.Department = _context.Department.First(); 
             _context.Add(obj); // add pelo contexto
             _context.SaveChanges();
         }
