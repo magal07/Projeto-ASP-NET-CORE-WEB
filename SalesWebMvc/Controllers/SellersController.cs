@@ -37,8 +37,20 @@ namespace SalesWebMvc.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken] // evita que conteúdos maliciosos sejam enviados pelo nosso Http
         public IActionResult Create(Seller seller) // n precisa acrescentar o dpt id pois o framework já faz a intermediação
-        {
-            _sellerService.Insert(seller); // método de inserir, agregado ao nosso serviço 
+        {  /* o if abaixo, representa navegadores ou ocasiões onde o JS tá desabilitado na WEB, e a requisição não é instanciada
+              desta forma, o if valida que se não chegar nenhuma requisição por conta do JS desabilitado ou afins, é pra BARRAR a edição! */
+            if (!ModelState.IsValid)
+            {           
+                var departments = _departmentService.FindAll(); // Obtém todos os departamentos através do serviço _departmentService
+                var viewModel = new SellerFormViewModel // Cria uma instância do ViewModel SellerFormViewModel com os dados do vendedor e a lista de departamentos
+                {
+                    Seller = seller, // Define o vendedor no ViewModel
+                    Departments = departments // Define a lista de departamentos no ViewModel
+                };
+                // Retorna a visão (View) com o ViewModel criado
+                return View(viewModel);
+            }
+                _sellerService.Insert(seller); // método de inserir, agregado ao nosso serviço 
             return RedirectToAction(nameof(Index)); // redireciona nossa inserção para o Index, nameof é para que caso eu mude o nome do Index eu não precise alterar mais nada
         }
 
@@ -101,7 +113,18 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
-            if (id != seller.Id)
+            /* o if abaixo, representa navegadores ou ocasiões onde o JS tá desabilitado na WEB, e a requisição não é instanciada
+              desta forma, o if valida que se não chegar nenhuma requisição por conta do JS desabilitado ou afins, é pra BARRAR a edição! */
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll(); // Obtém todos os departamentos através do serviço _departmentService
+                var viewModel = new SellerFormViewModel // Cria uma instância do ViewModel SellerFormViewModel com os dados do vendedor e a lista de departamentos
+                {
+                    Seller = seller, // Define o vendedor no ViewModel
+                    Departments = departments // Define a lista de departamentos no ViewModel
+                };
+            }
+                if (id != seller.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
