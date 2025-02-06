@@ -4,7 +4,9 @@ using SalesWebMvc.Models;
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 using SalesWebMvc.Services.Exceptions;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SalesWebMvc.Controllers
 {
@@ -44,13 +46,13 @@ namespace SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not provided"});
             }
 
             var obj = _sellerService.FindById(id.Value); // tem q passar como value pois ele é um obj opcional
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
             return View(obj); // caso passe pelos if, entra na nossa View(obj) 
@@ -67,13 +69,13 @@ namespace SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id  not provided" });
             }
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
 
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id  not found" });
             }
             return View(obj);
         }
@@ -81,13 +83,13 @@ namespace SalesWebMvc.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id  not provided" });
             }
 
             var obj = _sellerService.FindById(id.Value);
             if (obj == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = "Id  not found" });
             }
 
             List<Department> departments = _departmentService.FindAll();
@@ -101,21 +103,41 @@ namespace SalesWebMvc.Controllers
         {
             if (id != seller.Id)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
             try
             {
                 _sellerService.Update(seller);
                 return RedirectToAction(nameof(Index));
             }
+
+           /* Podemos utilizar o appexception genérico, pois ele busca o upcasting do dbconcrr...
+             catch (ApplicationException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            } */ 
+
             catch (NotFoundException e)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
             catch (DbConcurrencyException e)
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Error), new { message = e.Message });
             }
+        }
+
+        public IActionResult Error(string message)
+        {
+            // Cria uma instância de ErrorViewModel com a mensagem de erro fornecida e o ID da requisição atual
+            var viewModel = new ErrorViewModel
+            {
+                Message = message, // Define a mensagem de erro recebida como argumento
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier // Obtém o ID da atividade atual ou do identificador de rastreamento do HTTP
+            }; // Activity faz parte do using System.Diagnostics
+
+            // Retorna a visão de erro junto com o ViewModel
+            return View(viewModel);
         }
     }
 }
