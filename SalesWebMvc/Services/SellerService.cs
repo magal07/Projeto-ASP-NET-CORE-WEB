@@ -3,6 +3,7 @@ using SalesWebMvc.Data;
 using System.Collections.Generic;
 using System.Linq;
 using SalesWebMvc.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebMvc.Services
 {
@@ -28,7 +29,9 @@ namespace SalesWebMvc.Services
 
         public Seller FindById(int id)
         {
-            return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+            return _context.Seller
+                .Include(obj => obj.Department) // Fazendo um JOIN no nosso banco para buscar o Departamento
+                .FirstOrDefault(obj => obj.Id == id); // buscando por ID
         }
 
         public void Remove(int id)
