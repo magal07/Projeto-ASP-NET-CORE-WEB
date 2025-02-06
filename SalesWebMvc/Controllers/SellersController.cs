@@ -38,5 +38,28 @@ namespace SalesWebMvc.Controllers
             return RedirectToAction(nameof(Index)); // redireciona nossa inserção para o Index, nameof é para que caso eu mude o nome do Index eu não precise alterar mais nada
         }
 
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var obj = _sellerService.FindById(id.Value); // tem q passar como value pois ele é um obj opcional
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj); // caso passe pelos if, entra na nossa View(obj)
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            _sellerService.Remove(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
