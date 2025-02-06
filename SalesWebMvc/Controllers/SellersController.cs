@@ -51,7 +51,7 @@ namespace SalesWebMvc.Controllers
                 return NotFound();
             }
 
-            return View(obj); // caso passe pelos if, entra na nossa View(obj) /
+            return View(obj); // caso passe pelos if, entra na nossa View(obj) //
         }
 
         [HttpPost]
