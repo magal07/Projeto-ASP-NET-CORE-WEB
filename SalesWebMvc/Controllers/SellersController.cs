@@ -53,7 +53,7 @@ namespace SalesWebMvc.Controllers
 
             return View(obj); // caso passe pelos if, entra na nossa View(obj) 
         }
-        // Método do delete
+        // Método do delete acrescentado!
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
