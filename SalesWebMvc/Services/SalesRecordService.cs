@@ -37,5 +37,26 @@ namespace SalesWebMvc.Services
                 .OrderByDescending(x => x.Date)
                 .ToListAsync();
         }
+             // Acrescentado o IGrouping, para usar o Departamento e as Vendas numa mesma busca, conforme GroupBy 
+        public async Task<List<IGrouping<Department,SalesRecord>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)
+        {
+            var result = from obj in _context.SalesRecord select obj;
+            if (minDate.HasValue)
+            {
+                result = result
+                    .Where(x => x.Date >= minDate.Value);
+            }
+            if (maxDate.HasValue)
+            {
+                result = result
+                    .Where(x => x.Date <= maxDate.Value);
+            }
+            return await result
+                .Include(x => x.Seller) // x q leva em x.Seller, (faz o join das tabelas)
+                .Include(x => x.Seller.Department)
+                .OrderByDescending(x => x.Date)
+                .GroupBy(x => x.Seller.Department)
+                .ToListAsync();
+        }
     }
 }
