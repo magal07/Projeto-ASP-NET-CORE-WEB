@@ -5,6 +5,7 @@ using System.Linq;
 using SalesWebMvc.Models;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Services.Exceptions;
+using System.Threading.Tasks;
 
 namespace SalesWebMvc.Services
 {
@@ -17,41 +18,42 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
-        public List<Seller> FindAll()
+        public async Task<List<Seller>> FindAllAsync()
         {
-            return _context.Seller.ToList(); //acessar a fonte de dados da tabela de vendedores e converter para uma lista.
+            return await _context.Seller.ToListAsync(); //acessar a fonte de dados da tabela de vendedores e converter para uma lista.
         }
 
-        public void Insert(Seller obj)
+        public async Task InsertAsync(Seller obj)
         {
             _context.Add(obj); // add pelo contexto
-            _context.SaveChanges();
+           await _context.SaveChangesAsync(); // só precisa no save pois ele quem irá acessar o DB
         }
 
-        public Seller FindById(int id)
+        public async Task<Seller> FindByIdAsync(int id)
         {
-            return _context.Seller
+            return await _context.Seller
                 .Include(obj => obj.Department) // Fazendo um JOIN no nosso banco para buscar o Departamento
-                .FirstOrDefault(obj => obj.Id == id); // buscando por ID
+                .FirstOrDefaultAsync(obj => obj.Id == id); // buscando por ID &&somente ele acessa o banco e usa o async
         }
 
-        public void Remove(int id)
+        public async Task RemoveAsync(int id)
         {
-            var obj = _context.Seller.Find(id);
+            var obj = await _context.Seller.FindAsync(id);
             _context.Seller.Remove(obj); // aqui só remove do DBSET
-            _context.SaveChanges(); // CONFIRMA A REMOÇÃO!
+           await _context.SaveChangesAsync(); // CONFIRMA A REMOÇÃO!
         }
 
-        public void Update(Seller obj)
-        {   // Se não existir..."
-            if (!_context.Seller // verificando se existe algum registro no banco de dados conforme o que eu requisitar
-                .Any(x => x.Id == obj.Id)) // Lógica para testar se existe algum id igual ao objeto requisitado
+        public async Task UpdateAsync(Seller obj)
+        {  // hasAny = tem algum? ..." // verificando se existe algum registro no banco de dados conforme o que eu requisitar
+            bool hasAny = await _context.Seller
+                .AnyAsync(x => x.Id == obj.Id); // Lógica para testar se existe algum id igual ao objeto requisitado
+            if (!hasAny) 
             {
                 throw new NotFoundException("Id not found");
             }
             try { 
             _context.Update(obj);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e) // interceptando exceção nível de acesso a dados e..
             {

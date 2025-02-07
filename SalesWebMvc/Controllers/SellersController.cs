@@ -7,6 +7,7 @@ using SalesWebMvc.Services.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SalesWebMvc.Controllers
 {
@@ -20,28 +21,28 @@ namespace SalesWebMvc.Controllers
             _sellerService = sellerService;
             _departmentService = departmentService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = _sellerService.FindAll(); // esta operação vai retornar uma lista de seller
+            var list = await _sellerService.FindAllAsync(); // esta operação vai retornar uma lista de seller
 
             return View(list); // passando a lista como argumento pra gerar um IActionResult contendo essa lista. (MVC)
 
             // chamamos o controlador, o controlador acessou nosso model, pegou o dado da lista e vai encaminhar para nossa VIEW!
         }
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _departmentService.FindAll(); // buscar os deps
+            var departments = await _departmentService.FindAllAsync(); // buscar os deps
             var viewModel = new SellerFormViewModel { Departments = departments };
             return View(viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken] // evita que conteúdos maliciosos sejam enviados pelo nosso Http
-        public IActionResult Create(Seller seller) // n precisa acrescentar o dpt id pois o framework já faz a intermediação
+        public async Task<IActionResult> Create(Seller seller) // n precisa acrescentar o dpt id pois o framework já faz a intermediação
         {  /* o if abaixo, representa navegadores ou ocasiões onde o JS tá desabilitado na WEB, e a requisição não é instanciada
               desta forma, o if valida que se não chegar nenhuma requisição por conta do JS desabilitado ou afins, é pra BARRAR a edição! */
             if (!ModelState.IsValid)
             {           
-                var departments = _departmentService.FindAll(); // Obtém todos os departamentos através do serviço _departmentService
+                var departments = await _departmentService.FindAllAsync(); // Obtém todos os departamentos através do serviço _departmentService
                 var viewModel = new SellerFormViewModel // Cria uma instância do ViewModel SellerFormViewModel com os dados do vendedor e a lista de departamentos
                 {
                     Seller = seller, // Define o vendedor no ViewModel
@@ -50,18 +51,18 @@ namespace SalesWebMvc.Controllers
                 // Retorna a visão (View) com o ViewModel criado
                 return View(viewModel);
             }
-                _sellerService.Insert(seller); // método de inserir, agregado ao nosso serviço 
+               await _sellerService.InsertAsync(seller); // método de inserir, agregado ao nosso serviço 
             return RedirectToAction(nameof(Index)); // redireciona nossa inserção para o Index, nameof é para que caso eu mude o nome do Index eu não precise alterar mais nada
         }
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not provided"});
             }
 
-            var obj = _sellerService.FindById(id.Value); // tem q passar como value pois ele é um obj opcional
+            var obj = await _sellerService.FindByIdAsync(id.Value); // tem q passar como value pois ele é um obj opcional
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -72,18 +73,18 @@ namespace SalesWebMvc.Controllers
         // Método do delete acrescentado!
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            _sellerService.Remove(id);
+            await _sellerService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id  not provided" });
             }
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
             if (obj == null)
             {
 
@@ -91,33 +92,33 @@ namespace SalesWebMvc.Controllers
             }
             return View(obj);
         }
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id  not provided" });
             }
 
-            var obj = _sellerService.FindById(id.Value);
+            var obj = await _sellerService.FindByIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id  not found" });
             }
 
-            List<Department> departments = _departmentService.FindAll();
+            List<Department> departments = await _departmentService.FindAllAsync();
             SellerFormViewModel viewModel = new SellerFormViewModel { Seller = obj, Departments = departments };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Seller seller)
+        public async Task<IActionResult> Edit(int id, Seller seller)
         {
             /* o if abaixo, representa navegadores ou ocasiões onde o JS tá desabilitado na WEB, e a requisição não é instanciada
               desta forma, o if valida que se não chegar nenhuma requisição por conta do JS desabilitado ou afins, é pra BARRAR a edição! */
             if (!ModelState.IsValid)
             {
-                var departments = _departmentService.FindAll(); // Obtém todos os departamentos através do serviço _departmentService
+                var departments = await _departmentService.FindAllAsync(); // Obtém todos os departamentos através do serviço _departmentService
                 var viewModel = new SellerFormViewModel // Cria uma instância do ViewModel SellerFormViewModel com os dados do vendedor e a lista de departamentos
                 {
                     Seller = seller, // Define o vendedor no ViewModel
@@ -130,7 +131,7 @@ namespace SalesWebMvc.Controllers
             }
             try
             {
-                _sellerService.Update(seller);
+                await _sellerService.UpdateAsync(seller);
                 return RedirectToAction(nameof(Index));
             }
 

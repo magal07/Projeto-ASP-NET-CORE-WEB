@@ -2,6 +2,8 @@
 using SalesWebMvc.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebMvc.Services
 {
@@ -14,9 +16,13 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
-        public List<Department> FindAll()
+        
+        public async Task<List<Department>> FindAllAsync() // O modificador 'async' indica que este método é assíncrono
         {
-            return _context.Department.OrderBy(x => x.Name).ToList(); // Lista ordenada A-Z 
+            // O uso de 'await' aqui faz com que o método espere a conclusão da operação assíncrona sem bloquear a thread.
+            // '_context.Department.OrderBy(x => x.Name).ToListAsync()' retorna uma Task que contém a lista de departamentos ordenada.
+            return await _context.Department.OrderBy(x => x.Name).ToListAsync(); // Lista ordenada A-Z 
         }
+
     }
 }
