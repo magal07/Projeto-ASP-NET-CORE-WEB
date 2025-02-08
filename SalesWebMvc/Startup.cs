@@ -87,6 +87,7 @@ namespace SalesWebMvc
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {

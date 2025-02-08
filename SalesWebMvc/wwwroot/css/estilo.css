@@ -1,0 +1,256 @@
+﻿* .rubik-scribble-regular {
+    font-family: "Rubik Scribble", system-ui;
+    font-weight: 500;
+    font-style: normal;
+}
+
+
+
+body {
+    height: 100vh;
+    margin: 0px;
+    display: grid;
+    grid-template-rows: 120px 1fr 60px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "cabecalho"
+        "principal"
+        "rodape";
+}
+
+@keyframes mudarCor {
+    0% {
+        color: white;
+    }
+
+    100% {
+        color: white;
+    }
+}
+
+.cabecalho {
+    grid-area: cabecalho;
+    background: linear-gradient(135deg, #1f5095, #363636);
+    color: white; /* Início com a cor branca */
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centraliza verticalmente */
+    padding: 60px 20px;
+    z-index: 10;
+    box-shadow: 0px 10px 20px rgba(14, 40, 88, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: 0.3s;
+}
+
+    .cabecalho h1, .cabecalho h2, .cabecalho p {
+        animation: mudarCor 3s forwards; /* Aplica a animação para mudar a cor */
+    }
+
+/* interação dos links */
+
+a {
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+/* interação dos hovers*/
+
+a {
+    transition: color 0.3s ease;
+}
+
+    a:hover {
+        color: white;
+    }
+
+    a::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        transform: scaleX(0);
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: white;
+        transform-origin: bottom right;
+        transition: transform 0.25s ease-out;
+    }
+
+    a:hover::after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+
+/* Container para alinhar o logo e o texto do c#, ainda vou implementar. */
+.logo-csharp {
+    display: flex;
+    align-items: center; /* Centraliza o SVG verticalmente */
+    margin-right: 15px; /* Ajuste de espaço entre o logo e o conteúdo principal */
+}
+
+.cabecalho-conteudo {
+    text-align: center; /* Centraliza o texto */
+    flex-grow: 1;
+}
+
+/* Estilização do texto */
+.cabecalho h1, .cabecalho p {
+    margin: 0;
+    padding: 5px;
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cabecalho > h1 {
+    font-weight: 400;
+    font-size: 3rem;
+    letter-spacing: 1.2px;
+}
+
+.cabecalho > h2 {
+    font-weight: 300;
+    font-size: 1.5rem;
+    opacity: 0.85;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .cabecalho {
+        padding: 20px 15px;
+        border-radius: 8px;
+    }
+
+        .cabecalho > h1 {
+            font-size: 2.4rem;
+        }
+
+        .cabecalho > h2 {
+            font-size: 1.2rem;
+        }
+}
+
+.principal {
+    grid-area: principal;
+    height: calc(100vh - 180px);
+    background:white;
+    padding: 20px;
+}
+
+
+.conteudo {
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+    background: linear-gradient(135deg, #e0e0e0, #363636);
+    color: white;
+    padding: 20px;
+    box-shadow: 0px 0px 25px 0px rgba(134, 134, 134, 0.2);
+}
+
+.rodape {
+    grid-area: rodape;
+    background: linear-gradient(135deg, #1f5095, #363636);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 1.2rem;
+    padding-right: 20px;
+    color: white;
+    position: sticky;
+    bottom: 0px;
+}
+
+.modulos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.modulo {
+    flex-basis: calc(33.33% - 20px);
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Adiciona transição para a sombra */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    background-color: #e0e0e0;
+}
+
+.modulo {
+    transition: transform 0.3s, box-shadow 0.3s, color 0.3s; /* Adiciona transição suave para transform, box-shadow e cor */
+    color: #333; /* Cor inicial do texto */
+}
+
+    .modulo:hover {
+        transform: translateY(-5px) rotate(2deg); /* Efeito de elevação e rotação inclinação a direita (2deg) */
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Sombra mais pronunciada ao passar o mouse */
+        color: #857979; /* Cor do texto ao passar o mouse */
+    }
+
+    .modulo > h3 {
+        margin: 0;
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 1.5rem;
+        padding: 15px 20px;
+        background-color: #4CAF50;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .modulo > ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        .modulo > ul > li {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #333333;
+            transition: background-color 0.3s ease; /* Adiciona transição suave para a cor de fundo */
+        }
+
+            .modulo > ul > li:hover {
+                background-color: #272727; /* Cor de fundo mais suave ao passar o mouse */
+            }
+
+            .modulo > ul > li > a {
+                text-decoration: rgba(0, 0, 0, 0.2);
+                color: white; /* Herda a cor do texto do elemento pai */
+            }
+
+    .modulo.verde {
+        background: linear-gradient(135deg, #25a086, #363636);
+    }
+
+        .modulo.verde > h3 {
+            background: linear-gradient(135deg, #25a086, #363636);
+        }
+
+    .modulo.azul {
+        background: linear-gradient(135deg, #1f5095, #363636);
+    }
+
+        .modulo.azul > h3 {
+            background: linear-gradient(135deg, #1f5095, #363636);
+        }
+
+    .modulo.cinza {
+        background: linear-gradient(135deg, #e0e0e0, #363636);
+    }
+
+    .modulo.cinza > h3 {
+        background: linear-gradient(135deg, #e0e0e0, #363636);
+    }
+
+p.divisao {
+    margin-bottom: 0px;
+    font-weight: bold;
+}
+
+hr {
+    margin
