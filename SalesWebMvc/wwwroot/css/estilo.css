@@ -31,18 +31,42 @@ body {
 .cabecalho {
     grid-area: cabecalho;
     background: linear-gradient(135deg, #1f5095, #363636);
-    color: white; /* Início com a cor branca */
+    color: white;
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Centraliza verticalmente */
-    padding: 60px 20px;
+    align-items: center;
+    padding: 20px 40px;
     z-index: 10;
     box-shadow: 0px 10px 20px rgba(14, 40, 88, 0.3);
     border-radius: 12px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    overflow: hidden; /* Para garantir que elementos adicionais fiquem dentro do cabeçalho */
 }
+
+    .cabecalho:hover{
+                        transform: scale(1.02)
+                    }
+
+
+    /* Links de navegação */
+    .cabecalho nav {
+        display: flex;
+        gap: 20px;
+    }
+        .cabecalho nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+            .cabecalho nav a:hover {
+                color: #ffcd3c; /* Cor de destaque ao passar o mouse */
+            }
+
+
+
 
     .cabecalho h1, .cabecalho h2, .cabecalho p {
         animation: mudarCor 3s forwards; /* Aplica a animação para mudar a cor */
@@ -134,19 +158,25 @@ a {
 
 .principal {
     grid-area: principal;
-    height: calc(100vh - 180px);
-    background:white;
+    height: calc(50vh - 100px);
+    background: white;
     padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.3s;
 }
+    
+    .principal:hover {
+        transform: scale(1.02);
+    }
+
 
 
 .conteudo {
     position: relative;
-    height: 100%;
-    overflow-y: scroll;
-    background: linear-gradient(135deg, #e0e0e0, #363636);
+    height: 100%;    background: linear-gradient(135deg, #e0e0e0, #363636);
     color: white;
-    padding: 20px;
+    padding: 0px;
     box-shadow: 0px 0px 25px 0px rgba(134, 134, 134, 0.2);
 }
 
@@ -162,6 +192,19 @@ a {
     position: sticky;
     bottom: 0px;
 }
+
+    .rodape a {
+        margin: 5px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .rodape img {
+        width: 24px; 
+        height: auto; 
+        margin: 0 10px;
+    }
+
 
 .modulos {
     display: flex;
